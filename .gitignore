@@ -1,0 +1,66 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+.venv/
+venv/
+env/
+
+# VSCode settings
+.vscode/
+
+# macOS files
+.DS_Store
+
+# Logs
+*.log
+
+# Python egg files
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Test / coverage
+htmlcov/
+.tox/
+.nox/
+.coverage
+coverage.xml
+*.cover
+.hypothesis/
+
+# Jupyter
+.ipynb_checkpoints
+
+# Distribution / packaging
+.Python
+pip-wheel-metadata/
+*.whl
+
+# MyPy / Pyright / Pylint
+.mypy_cache/
+.pyright/
+pylint.log
+
+# API docs (if generated)
+docs/_build/
+
+# Docker / container artifacts (if generated)
+docker-compose.override.yml
+*.pid
+
+# Custom
+feature_extract_service/__pycache__/
+feature_reduce_service/__pycache__/
+api/__pycache__/
+
+# IDEs / editors
+.idea/
+*.swp
+*.swo
+*.sublime-project
+*.sublime-workspace
