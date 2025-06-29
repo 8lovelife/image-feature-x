@@ -31,7 +31,9 @@ async def extract_color_histogram(image_url: str,dm: int = 256) -> ExtractResult
                 "hist_b": hist_b.tolist(),
             }
         )
-    except:
+    except Exception as e:
+        print(f"COLOR_HISTOGRAM extract error: {e}")
+        raise RuntimeError(f"COLOR_HISTOGRAM extract error: {e}")
         return ExtractResult(
             original_vector=[1.0/dm] * dm,
         )

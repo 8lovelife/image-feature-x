@@ -11,7 +11,7 @@ from .pca import reduce_pca
 def reduce_tsne(feature_vector: List[float], target_dim: int, intermediate: Dict[str, Any]=None, stored_features: List[List[float]] = None) -> list:
     try:
         if target_dim not in (2, 3, 1):
-            raise ValueError("t-SNE 通常只支持降到1/2/3维")
+            raise ValueError("t-SNE usually only supports reduction to 1, 2, or 3 dimensions")
         vec = np.array(feature_vector, dtype=np.float32)
         if intermediate and 'descriptors' in intermediate:
             X = np.array(intermediate['descriptors'], dtype=np.float32)
@@ -24,4 +24,5 @@ def reduce_tsne(feature_vector: List[float], target_dim: int, intermediate: Dict
         return X_emb[-1].tolist()
     except Exception as e:
         print(f"reduce_tsne error: {e}")
+        raise RuntimeError(f"reduce_tsne error: {e}")
         return [1.0/target_dim] * target_dim

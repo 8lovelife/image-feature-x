@@ -22,5 +22,6 @@ def reduce_umap(feature_vector: List[float], target_dim: int, intermediate: Dict
         X_umap = umapper.fit_transform(X)
         return X_umap[-1].tolist()
     except Exception as e:
-        print(f"reduce_tsne error: {e}")
+        print(f"reduce_umap error: {e}")
+        raise RuntimeError(f"reduce_umap error: {e}")
         return [1.0/target_dim] * target_dim

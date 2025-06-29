@@ -74,6 +74,7 @@ async def extract_sift(image_url: str,dm: int) -> ExtractResult:
         
     except Exception as e:
         print(f"SIFT extract error: {e}")
+        raise RuntimeError(f"SIFT extract error: {e}")
         return ExtractResult(
             original_vector=[0.0] * dm,
         )

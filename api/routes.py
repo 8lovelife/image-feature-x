@@ -1,5 +1,7 @@
+import time
 from fastapi import APIRouter, Query
 from typing import Literal
+from core_service.feature_pipeline import run_feature_pipeline
 from feature_extract_service.types import FeatureType
 from feature_extract_service.strategy import get_extractor
 from feature_reduce_service.strategy import get_reducer
@@ -14,51 +16,61 @@ async def feature_pipeline_api(
     imageUrl: str = Query(..., alias="imageUrl"),
     dimensions: int = Query(...,alias="dimensions")
 ):
-    extractor = get_extractor(extract)
-    loop = asyncio.get_running_loop()
-    if asyncio.iscoroutinefunction(extractor):
-        extract_result = await extractor(imageUrl, dimensions)
-    else:
-        extract_result = await loop.run_in_executor(
-            None, extractor, imageUrl, dimensions
-        )
+    return await run_feature_pipeline(extract, imageUrl, dimensions)
+    
+    # extractor = get_extractor(extract)
+    # loop = asyncio.get_running_loop()
+    # start_time = time.time();
+    # if asyncio.iscoroutinefunction(extractor):
+    #     extract_result = await extractor(imageUrl, dimensions)
+    # else:
+    #     extract_result = await loop.run_in_executor(
+    #         None, extractor, imageUrl, dimensions
+    #     )
+    # end_time = time.time();
+    # elapsed = end_time - start_time;
+    # print(f"[extractor {extract}] Execution time: {elapsed:.4f} seconds")
 
-    if hasattr(extract_result, "original_vector"):
-        original_vector = extract_result.original_vector
-        intermediate = getattr(extract_result, "intermediate", None)
-    else:
-        original_vector = extract_result
-        intermediate = None
+    # if hasattr(extract_result, "original_vector"):
+    #     original_vector = extract_result.original_vector
+    #     intermediate = getattr(extract_result, "intermediate", None)
+    # else:
+    #     original_vector = extract_result
+    #     intermediate = None
 
-    # if not isinstance(original_vector, list):
-    #     original_vector = list(original_vector)
-    final = FinalResult(original_vector=original_vector)
+    # # if not isinstance(original_vector, list):
+    # #     original_vector = list(original_vector)
+    # final = FinalResult(original_vector=original_vector)
 
-    algos = ["pca", "umap", "tsne"]
-    # tasks_to_gather: Dict[str, asyncio.Future] = {}
+    # algos = ["pca", "umap", "tsne"]
+    # # tasks_to_gather: Dict[str, asyncio.Future] = {}
 
-    for algo in algos:
-        reducer = get_reducer(algo)
+    # for algo in algos:
+    #     start_time = time.time();
+    #     reducer = get_reducer(algo)
         
-        if asyncio.iscoroutinefunction(reducer):
-            vec1_result = await reducer(original_vector, 1, intermediate, None)
-            vec2_result = await reducer(original_vector, 2, intermediate, None)
-            vec3_result = await reducer(original_vector, 3, intermediate, None)
-        else:
-            loop = asyncio.get_event_loop()
-            vec1_result = await loop.run_in_executor(None, reducer, original_vector, 1, intermediate, None)
-            vec2_result = await loop.run_in_executor(None, reducer, original_vector, 2, intermediate, None)
-            vec3_result = await loop.run_in_executor(None, reducer, original_vector, 3, intermediate, None)
+    #     if asyncio.iscoroutinefunction(reducer):
+    #         vec1_result = await reducer(original_vector, 1, intermediate, None)
+    #         vec2_result = await reducer(original_vector, 2, intermediate, None)
+    #         vec3_result = await reducer(original_vector, 3, intermediate, None)
+    #     else:
+    #         loop = asyncio.get_event_loop()
+    #         vec1_result = await loop.run_in_executor(None, reducer, original_vector, 1, intermediate, None)
+    #         vec2_result = await loop.run_in_executor(None, reducer, original_vector, 2, intermediate, None)
+    #         vec3_result = await loop.run_in_executor(None, reducer, original_vector, 3, intermediate, None)
         
-        setattr(final, algo, DimReductionVectors(
-            vector_1d=list(vec1_result),
-            vector_2d=list(vec2_result),
-            vector_3d=list(vec3_result),
-        ))
-        print(f"algo {algo} done")
+    #     setattr(final, algo, DimReductionVectors(
+    #         vector_1d=list(vec1_result),
+    #         vector_2d=list(vec2_result),
+    #         vector_3d=list(vec3_result),
+    #     ))
+    #     end_time = time.time();
+    #     elapsed = end_time - start_time;
+    #     print(f"[reducer {algo}] Execution time: {elapsed:.4f} seconds")
+    #     print(f"algo {algo} done")
 
 
-    return final
+    # return final
 
 
 @router.get("/test", response_model=FinalResult)

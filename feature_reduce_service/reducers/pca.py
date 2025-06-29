@@ -25,6 +25,7 @@ def reduce_pca(feature_vector: List[float], target_dim: int, intermediate: Dict[
         return reduced.tolist()
     except Exception as e:
         print(f"reduce_pca error: {e}")
+        raise RuntimeError(f"reduce_pca error: {e}")
         return [1.0/target_dim] * target_dim
 
 def _variance_based_selection(feature_vector: np.ndarray, target_dim: int) -> List[float]:
