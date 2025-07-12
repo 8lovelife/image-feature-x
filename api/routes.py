@@ -1,12 +1,7 @@
-import time
 from fastapi import APIRouter, Query
-from typing import Literal
 from core_service.feature_pipeline import run_feature_pipeline
 from feature_extract_service.types import FeatureType
-from feature_extract_service.strategy import get_extractor
-from feature_reduce_service.strategy import get_reducer
-from .types import FinalResult,DimReductionVectors
-import asyncio
+from .types import FinalResult
 
 router = APIRouter()
 

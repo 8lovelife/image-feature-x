@@ -25,4 +25,3 @@ def reduce_tsne(feature_vector: List[float], target_dim: int, intermediate: Dict
     except Exception as e:
         print(f"reduce_tsne error: {e}")
         raise RuntimeError(f"reduce_tsne error: {e}")
-        return [1.0/target_dim] * target_dim
